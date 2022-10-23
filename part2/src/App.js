@@ -6,13 +6,11 @@ import Note from './components/Note'
 axios.get('https://api.openweathermap.org/data/2.5/weather?lat=55.781001&lon=37.604380&appid=355758e690d095d8efd21adbc7d4d8c8').then(response => {
   
   const test = response.data
-  console.log('SJ')
+
   
 })
 
 const api_key = process.env.REACT_APP_API_KEY
-
-console.log(api_key)
 
 
 
@@ -66,18 +64,21 @@ const App = (props) => {
   const Weather = (capital) => {
     
     axios.get("https://api.openweathermap.org/geo/1.0/direct?q=" + capital + ",,FRO&appid=" + api_key).then(response => {
-      console.log('sdfd')
+  
       const lat = response.data[0].lat
       const lon = response.data[0].lon
       
       axios.get("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + api_key).then(response => {
   
         const dataWeather = response.data
-        
+
         console.log(dataWeather.main.temp);
       })
     })
-    
+
+    return(
+      <div>Temperature </div>
+    )
   }
 
 
