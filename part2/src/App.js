@@ -8,7 +8,6 @@ import axios from 'axios'
 axios.get('https://api.openweathermap.org/geo/1.0/direct?q=Tórshavn,,FRO&appid=355758e690d095d8efd21adbc7d4d8c8').then(response => {
   
   const test = response.data
-
   
 })
 
