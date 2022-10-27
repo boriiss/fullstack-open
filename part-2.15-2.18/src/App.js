@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react'
 
 import Note from './components/Note'
 import noteService from './services/notes'
+import Notification from './components/Notification'
 
 const App = (props) => {
   const [notes, setNotes] = useState(props.notes)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState(true)
-  const [reboot, setReboot] = useState(false)
+  const [goodMessage, setGoodMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     noteService
@@ -35,6 +37,12 @@ const App = (props) => {
           setNotes(notes.concat(returnedNote))
           setNewName('')
           setNewNumber('')
+          setGoodMessage(
+            `Заметка создана`
+          )
+          setTimeout(() => {
+            setGoodMessage(null)
+          }, 5000)
         })
     } else {
       const idNote = searchName[0].id
@@ -46,9 +54,25 @@ const App = (props) => {
           .update(idNote, changedNote)
           .then(returnedNote => {
             setNotes(notes.map(note => note.id !== idNote ? note : returnedNote))
+            setNewName('')
+            setNewNumber('')
+            setGoodMessage(
+              `Номер изменен`
+            )
+            setTimeout(() => {
+              setGoodMessage(null)
+            }, 5000)
           })
-          setNewName('')
-          setNewNumber('')
+          .catch(error => {
+            setErrorMessage(
+              `Ошибка`
+            )
+            setNewName('')
+            setNewNumber('')
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+          })
       }
     }
   }
@@ -99,6 +123,8 @@ const App = (props) => {
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={goodMessage} error={false}/>
+      <Notification message={errorMessage} error={true}/>
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all' }
